@@ -312,6 +312,8 @@ void usage(void)
             "  continue                                 continue with autoboot\n"
             "  reboot [bootloader]                      reboot device, optionally into bootloader\n"
             "  reboot-bootloader                        reboot device into bootloader\n"
+            "  bbk unlock_vivo                          unlocks the vivo device\n"
+            "  bbk lock_vivo                            locks the vivo device\n"
             "  help                                     show this help message\n"
             "\n"
             "options:\n"
@@ -1283,6 +1285,11 @@ int main(int argc, char **argv)
             wants_reboot = 1;
         } else if(!strcmp(*argv, "oem")) {
             argc = do_oem_command(argc, argv);
+        } else if(!strcmp(*argv, "bbk")) {
+            if (argc == 2 && (!strcmp(*(argv+1), "unlock_vivo") ||
+                             !strcmp(*(argv+1), "lock_vivo"))) {
+                argc = do_oem_command(argc, argv);
+            }
         } else if(!strcmp(*argv, "flashing")) {
             if (argc == 2 && (!strcmp(*(argv+1), "unlock") ||
                               !strcmp(*(argv+1), "lock") ||
