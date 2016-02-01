@@ -312,6 +312,7 @@ void usage(void)
             "  continue                                 continue with autoboot\n"
             "  reboot [bootloader]                      reboot device, optionally into bootloader\n"
             "  reboot-bootloader                        reboot device into bootloader\n"
+            "  reboot-edl                               reboot device into dload\n"
             "  bbk unlock_vivo                          unlocks the vivo device\n"
             "  bbk lock_vivo                            locks the vivo device\n"
             "  help                                     show this help message\n"
@@ -1027,6 +1028,7 @@ int main(int argc, char **argv)
     int wants_wipe = 0;
     int wants_reboot = 0;
     int wants_reboot_bootloader = 0;
+    int wants_reboot_edl = 0;
     int erase_first = 1;
     void *data;
     unsigned sz;
@@ -1221,6 +1223,9 @@ int main(int argc, char **argv)
         } else if(!strcmp(*argv, "reboot-bootloader")) {
             wants_reboot_bootloader = 1;
             skip(1);
+        } else if(!strcmp(*argv, "reboot-edl")) {
+            wants_reboot_edl = 1;
+            skip(1);
         } else if (!strcmp(*argv, "continue")) {
             fb_queue_command("continue", "resuming boot");
             skip(1);
@@ -1287,7 +1292,7 @@ int main(int argc, char **argv)
             argc = do_oem_command(argc, argv);
         } else if(!strcmp(*argv, "bbk")) {
             if (argc == 2 && (!strcmp(*(argv+1), "unlock_vivo") ||
-                             !strcmp(*(argv+1), "lock_vivo"))) {
+                              !strcmp(*(argv+1), "lock_vivo"))) {
                 argc = do_oem_command(argc, argv);
             }
         } else if(!strcmp(*argv, "flashing")) {
@@ -1323,6 +1328,9 @@ int main(int argc, char **argv)
         fb_queue_wait_for_disconnect();
     } else if (wants_reboot_bootloader) {
         fb_queue_command("reboot-bootloader", "rebooting into bootloader");
+        fb_queue_wait_for_disconnect();
+    } else if (wants_reboot_edl) {
+        fb_queue_command("reboot-edl", "rebooting into dload");
         fb_queue_wait_for_disconnect();
     }
 
