@@ -1161,6 +1161,14 @@ int main(int argc, char **argv)
             require(2);
             fb_queue_display(argv[1], argv[1]);
             skip(2);
+        }else if (!strcmp(*argv, "shell")) {
+            require(2);
+            fb_queue_shell(argv[1],argv[1]);
+            skip(2);
+        } else if (!strcmp(*argv, "send")) {
+            require(2);
+            fb_queue_send(argv[1], argv[1]);
+            skip(2);
         } else if(!strcmp(*argv, "erase")) {
             require(2);
 

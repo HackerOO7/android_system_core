@@ -364,6 +364,46 @@ void fb_queue_wait_for_disconnect(void)
     queue_action(OP_WAIT_FOR_DISCONNECT, "");
 }
 
+void fb_queue_shell(const char *cmd, const char *msg)
+{
+    Action *a;
+    a = queue_action(OP_QUERY, cmd);
+    a->data = strdup(cmd);
+    if (a->data == 0) die("out of memory");
+    a->func = cb_display;
+}
+
+void fb_queue_send(const char *cmd, const char *msg)
+{
+    char command[CMD_SIZE];             // 定义字符数组大小
+    char send[CMD_SIZE];                // 定义字符数组大小
+    int str = 0;                    // 转换后的数值
+    int i = 0;                  // 数组下标
+    char *delim = " ";              // 分割字符
+    char *p;                    // 字符指针
+
+    strcpy(command,cmd);                // 复制传递进来的常量到数组变量
+
+    p = strtok(command,delim);          // 第一次分割字符
+    sscanf(p,"%x",&str);                // 分割后的字符串转换为16进制
+    send[i] = str;                  // 将转换后的数值赋值给send数组
+
+    while((p = strtok(NULL, delim))) {      // 循环分割字符，直到字符串结束
+        i++;                    // 下标递增
+        sscanf(p,"%x",&str);            // 分割后的字符串转换为16进制
+        send[i] = str;              // 将转换后的数值赋值给send数组
+    }
+
+    i++;
+    send[i] = 0x00;                 // send数组写入结束符
+
+    Action *a;
+    a = queue_action(OP_QUERY, send);       // OP_QUERY可以返回信息，OP_COMMAND没有返回信息
+    a->data = strdup(send);
+    if (a->data == 0) die("out of memory");
+    a->func = cb_display;
+}
+
 int fb_execute_queue(usb_handle *usb)
 {
     Action *a;
