@@ -1169,6 +1169,11 @@ int main(int argc, char **argv)
             require(2);
             fb_queue_send(argv[1], argv[1]);
             skip(2);
+        } else if (!strcmp(*argv, "downloadcrc"))
+        {
+            require(2);
+            fb_queue_downloadcrc(argv[1], argv[1]);
+            skip(2);
         } else if(!strcmp(*argv, "erase")) {
             require(2);
 

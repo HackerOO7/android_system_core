@@ -65,6 +65,7 @@ void fb_queue_notice(const char *notice);
 void fb_queue_wait_for_disconnect(void);
 void fb_queue_shell(const char *cmd, const char *msg);
 void fb_queue_send(const char *cmd, const char *msg);
+void fb_queue_downloadcrc(const char *var, const char *crc);
 int fb_execute_queue(usb_handle *usb);
 int fb_queue_is_empty(void);
 

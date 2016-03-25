@@ -307,6 +307,16 @@ void fb_queue_display(const char *var, const char *prettyname)
     a->func = cb_display;
 }
 
+void fb_queue_downloadcrc(const char *var, const char *crc)
+{
+    Action *a;
+    a = queue_action(OP_QUERY, "downloadcrc:%s", var);
+    a->data = strdup(crc);
+    if (a->data == 0) die("out of memory");
+    a->func = cb_display;
+}
+
+
 static int cb_save(Action *a, int status, char *resp)
 {
     if (status) {
